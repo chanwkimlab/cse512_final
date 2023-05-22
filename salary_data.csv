@@ -1,0 +1,75 @@
+state,job_title_sim,seniority_by_title,upper,avg,lower
+Alabama,data engineer,jr,86,65,44
+Alabama,data scientist,jr,95,68,41
+Arizona,data engineer,jr,79,65,52
+Arizona,data engineer,sr,110,100,90
+Arizona,data scientist,jr,140,106,72
+California,data engineer,jr,140,107,75
+California,data engineer,sr,181,149,117
+California,data scientist,jr,162,130,99
+California,data scientist,sr,197,162,127
+Colorado,data engineer,jr,124,99,74
+Colorado,data scientist,jr,111,87,64
+Colorado,data scientist,sr,147,119,91
+Connecticut,data scientist,jr,105,84,63
+Florida,data engineer,jr,111,91,72
+Florida,data scientist,jr,103,87,72
+Florida,data scientist,sr,151,122,93
+Georgia,data scientist,jr,101,81,61
+Iowa,data engineer,jr,101,77,54
+Iowa,data engineer,sr,148,115,83
+Illinois,data engineer,jr,110,89,68
+Illinois,data engineer,sr,140,107,75
+Illinois,data scientist,jr,193,155,118
+Illinois,data scientist,sr,162,133,104
+Indiana,data engineer,jr,119,90,62
+Indiana,data engineer,sr,158,122,87
+Indiana,data scientist,jr,106,84,63
+Indiana,data scientist,sr,148,106,65
+Kentucky,data scientist,jr,105,84,63
+Louisiana,data engineer,jr,93,70,48
+Massachusetts,data engineer,jr,138,107,75
+Massachusetts,data scientist,jr,119,94,68
+Massachusetts,data scientist,sr,167,135,104
+Maryland,data engineer,jr,142,109,76
+Maryland,data scientist,jr,119,95,71
+Maryland,data scientist,sr,173,140,107
+Michigan,data scientist,jr,120,96,72
+Michigan,data scientist,sr,134,117,100
+Minnesota,data engineer,jr,125,95,65
+Missouri,data scientist,jr,157,127,97
+North Carolina,data engineer,jr,115,88,62
+North Carolina,data engineer,sr,155,119,83
+North Carolina,data scientist,jr,126,102,78
+North Carolina,data scientist,sr,154,124,95
+New Jersey,data engineer,jr,146,112,78
+New Jersey,data scientist,jr,169,138,107
+New Jersey,data scientist,sr,124,98,73
+New Mexico,data scientist,jr,93,74,55
+New York,data engineer,jr,113,86,59
+New York,data scientist,jr,131,104,78
+New York,data scientist,sr,180,146,112
+Ohio,data scientist,jr,126,101,76
+Ohio,data scientist,sr,133,107,80
+Oregon,data engineer,jr,97,73,49
+Oregon,data scientist,jr,122,98,74
+Pennsylvania,data engineer,jr,120,91,63
+Pennsylvania,data scientist,jr,140,111,82
+Pennsylvania,data scientist,sr,156,126,96
+Tennessee,data engineer,jr,125,97,69
+Tennessee,data engineer,sr,132,101,71
+Tennessee,data scientist,jr,122,96,70
+Texas,data engineer,jr,136,104,73
+Texas,data engineer,sr,180,138,97
+Texas,data scientist,jr,125,100,76
+Texas,data scientist,sr,124,100,76
+Utah,data engineer,jr,131,100,69
+Utah,data scientist,sr,173,140,108
+Virginia,data engineer,jr,125,96,68
+Virginia,data engineer,sr,127,97,67
+Virginia,data scientist,jr,125,100,75
+Virginia,data scientist,sr,131,104,77
+Washington,data scientist,jr,98,77,57
+Washington,data scientist,sr,149,124,99
+Wisconsin,data scientist,jr,149,120,91
+Wisconsin,data scientist,sr,125,100,76
