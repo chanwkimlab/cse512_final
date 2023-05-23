@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<html>
+
+<head>
+    <title>Data scientist jobs</title>
+    <style>
+        /* CSS styles go here */
+        /* Reset some default styles in browsers */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Style for the page */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #F5F5F5;
+            padding: 20px;
+        }
+
+        #container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        #salarybar {
+            width: 100%;
+            height: 500px;
+            margin-bottom: 200px;
+        }
+
+        #buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        /* style for the footer */
+        footer {
+            background: #fff;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+            color: #888;
+            text-align: center;
+            font-size: 14px;
+            margin-top: 30px;
+        }
+
+        .tooltip {
+            position: absolute;
+            padding: 8px;
+            background: white;
+            border: 1px solid black;
+        }
+
+        .btn-secondary {
+            background-color: #69b3a2 !important;
+            /* Green */
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #437c70 !important;
+            /* Darker green */
+        }
+
+
+
+        /* <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"> */
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <div id="container">
+        <div id="salarybar"></div>
+
+        <!-- Add 2 buttons -->
+        <!-- <a href="#" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">Primary link</a> -->
+        <!-- <a href="#" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Link</a> -->
+        <!-- <button type="button" class="btn btn-primary" onclick="update(data_ds)">Data Scientist</button> -->
+        <!-- <button type="button" class="btn btn-primary" onclick="update(data_de)">Data Engineer</button> -->
+        <!-- <button type="button" class="btn btn-dar" onclick="update(data_ds)">Variable 2</button> -->
+
+
+        <div id="buttons" class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary active">
+                <input type="radio" name="options" id="option1" autocomplete="off" checked
+                    onclick="update(data_ds, 'Data Scientist salaries across US states')"> Data
+                Scientist
+            </label>
+            <label class="btn btn-secondary active">
+                <input type="radio" name="options" id="option1" autocomplete="off"
+                    onclick="update(data_de, 'Data Engineer salaries across US states')"> Data
+                Engineer
+            </label>
+        </div>
+        <!-- <div id="salarymap"></div> -->
+    </div>
+
+    <footer>
+        <p>From kaggle dataset</p>
+    </footer>
+    <script>
+
+        var data_ds = [];
+        var data_de = [];
+        d3.csv('salary_data.csv').then(function (data) {
+            // add each row to the array
+            data.forEach(function (d) {
+                d.avg = parseInt(d.avg)
+                d.upper = parseInt(d.upper)
+                d.lower = parseInt(d.lower)
+                if (d.job_title_sim == "data scientist") {
+                    data_ds.push(d);
+                }
+                else if (d.job_title_sim == "data engineer") {
+                    data_de.push(d);
+                }
+            });
+            // Initialize the plot with the first dataset
+            update(data_ds, 'Data Scientist salaries across US states')
+            // update(data_ds, 'Data Scientist salaries across US states')
+        })
+
+
+        console.log(data_de);
+        console.log(data_ds);
+
+
+        // set the dimensions and margins of the graph
+        var margin = { top: 70, right: 70, bottom: 200, left: 80 },
+            width = 1700 - margin.left - margin.right,
+            height = 800 - margin.top - margin.bottom;
+
+
+        // append the svg object to the body of the page
+        var svgBar = d3.select("#salarybar")
+            // .attr("width", "100%")
+            // .attr("height", "100%")
+            .append("svg")
+            .attr("viewBox", [0, 0, width + margin.left + margin.right, height + margin.top + margin.bottom].join(' '))
+            .append("g")
+            .attr("transform",
+                "translate(" + margin.left + "," + margin.top + ")");
+
+        // Initialize the X axis
+        var x = d3.scaleBand()
+            .range([0, width])
+            .padding(0.2);
+        var xAxis = svgBar.append("g")
+            .attr("transform", "translate(0," + height + ")")
+
+        // Initialize the Y axis
+        var y = d3.scaleLinear()
+            .range([height, 0]);
+        var yAxis = svgBar.append("g")
+            .attr("class", "myYaxis")
+
+
+        var tooltip = d3.select("#salarybar").append("div").style("position", "absolute")
+            .style("background-color", "white")
+            .style("border-radius", "6px")
+            .style("border", "1px solid #ccc")
+            .style("z-index", "10")
+
+        // .append("div").text("a simple tooltip");
+        // .attr("class", "tooltip")
+        // .style("position", "absolute")
+        // .style("z-index", "10")
+        // .style("visibility", "hidden")
+        // .style("background-color", "white")
+        // .style("padding", "8px")
+        // .style("border-radius", "6px")
+        // .style("border", "1px solid #ccc")
+        // .text("a simple tooltip");
+
+        // A function that create / update the plot for a given variable:
+        function update(data, title) {
+            console.log(data);
+            data.sort((a, b) => b.avg - a.avg);
+
+            // Update the X axis
+            x.domain(data.map(function (d) { return d.state; }))
+            xAxis.call(d3.axisBottom(x))
+                .selectAll("text")
+                .attr("transform", "rotate(-45)")
+                .style("font-size", "30px")
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", ".15em");
+
+            // Update the Y axis
+            // y.domain([0, d3.max(data, function (d) { return d.avg })]);
+            y.domain([0, d3.max(data, function (d) { return 200 })]);
+            yAxis.transition()
+                // .style("font-size", "30px")
+                .style("font-size", "30px")
+                .duration(1000).call(d3.axisLeft(y));
+
+            // Create the u variable
+            var u = svgBar.selectAll("rect")
+                .data(data)
+
+            var rect = u.enter()
+                .append("rect") // Add a new rect for each new elements
+                .merge(u) // get the already existing elements as well
+
+            rect.transition() // and apply changes to all of them
+                .duration(100)
+                .attr("x", function (d) { return x(d.state); })
+                .attr("y", function (d) { return y(d.avg); })
+                .attr("width", x.bandwidth())
+                .attr("height", function (d) { return height - y(d.avg); })
+                .attr("fill", "#69b3a2")
+            rect.on("mouseover", function (event, d) {
+                console.log("Mouseover event fired!", d.state, d.avg);
+                // tooltip.text(`State: ${d.state}\nAverage: ${d.avg}`)
+
+                tooltip.html(`State: ${d.state}<br>Average: ${d.avg}`)
+                    .style("left", (d3.pointer(event, this)[0]) + "px")
+                    .style("top", (d3.pointer(event, this)[1]) + "px")
+                    .style("visibility", "visible");
+
+
+
+                // return tooltip.style("visibility", "visible");
+            })
+                .on("mousemove", function (event, d) {
+                    tooltip.style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 20) + "px");
+                })
+                .on("mouseout", function (event, d) { return tooltip.style("visibility", "hidden"); });
+
+            // If less state in the new dataset, I delete the ones not in use anymore
+            u.exit().remove()
+
+            svgBar.selectAll("text.title").remove();
+            svgBar.append("text")
+                .attr("class", "title")
+                .attr("x", width / 2)
+                .attr("y", 0 - (margin.top / 2))
+                .attr("text-anchor", "middle")
+                .style("font-size", "45px")
+                // .style("text-decoration", "underline")
+                .text(title);
+        }
+
+
+
+    </script>
+
+</body>
+
+</html>

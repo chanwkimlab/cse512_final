@@ -99,14 +99,36 @@
 
         <div id="buttons" class="btn-group btn-group-toggle" data-toggle="buttons">
             <label class="btn btn-secondary active">
-                <input type="radio" name="options" id="option1" autocomplete="off" checked
-                    onclick="update(data_ds, 'Data Scientist salaries across US states')"> Data
-                Scientist
+                <input type="radio" name="options1" id="option1" autocomplete="off" checked
+                    onclick="update(data_load, 'data scientist', '')"> Data Scientist
             </label>
             <label class="btn btn-secondary active">
-                <input type="radio" name="options" id="option1" autocomplete="off"
-                    onclick="update(data_de, 'Data Engineer salaries across US states')"> Data
+                <input type="radio" name="options1" id="option2" autocomplete="off"
+                    onclick="update(data_load, 'data engineer', '')"> Data Engineer
+            </label>
+            <label class="btn btn-secondary active">
+                <input type="radio" name="options1" id="option3" autocomplete="off"
+                    onclick="update(data_load, 'analyst', '')">
+                Analyst
                 Engineer
+            </label>
+            <label class="btn btn-secondary active">
+                <input type="radio" name="options1" id="option1" autocomplete="off"
+                    onclick="update(data_load, 'other', '')">
+                Other
+                Scientist
+            </label>
+        </div>
+
+        <div id="buttons" class="btn-group btn-group-toggle" data-toggle="buttons">
+            <label class="btn btn-secondary active">
+                <input type="radio" name="options2" id="option4" autocomplete="off" checked
+                    onclick="update(data_load, '', 'sr')"> Junior
+            </label>
+            <label class="btn btn-secondary active">
+                <input type="radio" name="options2" id="option5" autocomplete="off"
+                    onclick="update(data_load, '', 'jr')">
+                Senior
             </label>
         </div>
         <!-- <div id="salarymap"></div> -->
@@ -119,6 +141,7 @@
 
         var data_ds = [];
         var data_de = [];
+        var data_load = []
         d3.csv('salary_data.csv').then(function (data) {
             // add each row to the array
             data.forEach(function (d) {
@@ -131,15 +154,18 @@
                 else if (d.job_title_sim == "data engineer") {
                     data_de.push(d);
                 }
+                data_load.push(d);
             });
             // Initialize the plot with the first dataset
-            update(data_ds, 'Data Scientist salaries across US states')
+            // console.log(data);
+            update(data_load, 'data scientist', 'sr')
+            // update(data_ds, 'Data Scientist salaries across US states')
             // update(data_ds, 'Data Scientist salaries across US states')
         })
 
 
-        console.log(data_de);
-        console.log(data_ds);
+        // console.log(data_de);
+        // console.log(data_ds);
 
 
         // set the dimensions and margins of the graph
@@ -190,11 +216,44 @@
         // .text("a simple tooltip");
 
         // A function that create / update the plot for a given variable:
-        function update(data, title) {
-            data.sort((a, b) => b.avg - a.avg);
+        function update(data, jobType, seniority) {
+
+            // console.log(jobType, seniority);
+
+
+            // console.log('type', Array.isArray(data));
+            // console.log(data);
+
+            //get jobType attribute from svgBar
+            if (jobType == "") {
+                // console.log("inside", 'jobexecuted')
+                jobType = svgBar.attr("jobType")
+            }
+
+            if (seniority == "") {
+                // console.log("inside", 'seniorexecuted')
+                seniority = svgBar.attr("seniority")
+            }
+            svgBar.attr("seniority", seniority)
+            svgBar.attr("jobType", jobType)
+
+            console.log(jobType, seniority, data);
+            var dataSelect = []
+            Array.from(data).forEach(function (d) {
+                console.log(d)
+                console.log(d.job_title_sim, jobType, d.seniority_by_title, seniority);
+                console.log(d.job_title_sim == jobType, d.seniority_by_title == seniority);
+                if (d.job_title_sim == jobType && d.seniority_by_title == seniority) {
+                    dataSelect.push(d);
+                }
+
+            })
+            console.log('final', dataSelect);
+
+            dataSelect.sort((a, b) => b.avg - a.avg);
 
             // Update the X axis
-            x.domain(data.map(function (d) { return d.state; }))
+            x.domain(dataSelect.map(function (d) { return d.state; }))
             xAxis.call(d3.axisBottom(x))
                 .selectAll("text")
                 .attr("transform", "rotate(-45)")
@@ -205,7 +264,7 @@
 
             // Update the Y axis
             // y.domain([0, d3.max(data, function (d) { return d.avg })]);
-            y.domain([0, d3.max(data, function (d) { return 200 })]);
+            y.domain([0, d3.max(dataSelect, function (d) { return 200 })]);
             yAxis.transition()
                 // .style("font-size", "30px")
                 .style("font-size", "30px")
@@ -213,7 +272,7 @@
 
             // Create the u variable
             var u = svgBar.selectAll("rect")
-                .data(data)
+                .data(dataSelect)
 
             var rect = u.enter()
                 .append("rect") // Add a new rect for each new elements
@@ -247,6 +306,29 @@
 
             // If less state in the new dataset, I delete the ones not in use anymore
             u.exit().remove()
+
+            var title = "";
+            console.log(seniority)
+            if (seniority == "sr") {
+                title += "Senior ";
+            } else if (seniority == "jr") {
+                title += "Junior ";
+            } else {
+                title += "All ";
+            }
+
+
+            if (jobType == "data scientist") {
+                title += "Data Scientist";
+            } else if (jobType == "data engineer") {
+                title += "Data Engineer";
+            } else if (jobType == "analyst") {
+                title += "Analyst";
+            } else {
+                title += "Other";
+            }
+            title += " salaries across US states";
+
 
             svgBar.selectAll("text.title").remove();
             svgBar.append("text")
