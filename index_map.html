@@ -130,8 +130,9 @@
                 }
 
             })
+            console.log(dataSelect)
 
-            console.log(dataSelect);
+
 
             d3.json("us-states.json").then(function (geodata) {
                 // Filter data
@@ -151,7 +152,8 @@
                         .style("stroke", "black")
                         .style("opacity", .3);
                 }
-
+                console.log(geodata)
+                console.log(dataSelect)
                 // Remove old circles
                 svgMap.selectAll("circle").remove();
                 // Add circles:
@@ -161,7 +163,7 @@
                     .join("circle")
                     .attr("cx", d => projection([d.longitude, d.latitude])[0])
                     .attr("cy", d => projection([d.longitude, d.latitude])[1])
-                    .attr("r", function (d) { return Math.sqrt(d.jobcount) * 5; }) // Adjust radius based on jobcount or other parameter
+                    .attr("r", function (d) { return Math.sqrt(d.avg) * 5; }) // Adjust radius based on jobcount or other parameter
                     .style("fill", "blue")
                     .attr("stroke", "gray")
                     .attr("stroke-width", 2)
@@ -170,7 +172,7 @@
                         tooltip.transition()
                             .duration(200)
                             .style("opacity", .9);
-                        tooltip.html(d.state + ": " + d.jobcount)
+                        tooltip.html(d.state + ": " + d.avg + "k")
                             .style("left", (event.pageX) + "px")
                             .style("top", (event.pageY - 28) + "px");
                         console.log(tooltip)
