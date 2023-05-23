@@ -163,7 +163,7 @@
                     .join("circle")
                     .attr("cx", d => projection([d.longitude, d.latitude])[0])
                     .attr("cy", d => projection([d.longitude, d.latitude])[1])
-                    .attr("r", function (d) { return Math.sqrt(d.avg) * 5; }) // Adjust radius based on jobcount or other parameter
+                    .attr("r", function (d) { return Math.sqrt(d.avg) * 2; }) // Adjust radius based on jobcount or other parameter
                     .style("fill", "blue")
                     .attr("stroke", "gray")
                     .attr("stroke-width", 2)
